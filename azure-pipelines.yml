@@ -8,7 +8,6 @@ pool:
 
 variables:
   PYTHON_VERSION: '3.11'
-  NODE_VERSION: '20.x'
 
 jobs:
 
@@ -21,11 +20,6 @@ jobs:
       versionSpec: $(PYTHON_VERSION)
     displayName: 'Setup Python'
 
-  - task: NodeTool@0
-    inputs:
-      versionSpec: $(NODE_VERSION)
-    displayName: 'Setup Node.js'
-
   - script: |
       echo "=== Online Quiz System Build ==="
       python --version
@@ -33,12 +27,10 @@ jobs:
     displayName: 'Verify Tools'
 
   - script: |
-      pip install pytest bandit --quiet
-      pip install flask sqlalchemy --quiet
+      pip install pytest bandit flask sqlalchemy --quiet
     displayName: 'Install Quiz Dependencies'
 
   - script: |
-      pip install bandit --quiet
       bandit -r . --exclude ./.git -ll -q || true
     displayName: 'Security Scan'
 
@@ -70,7 +62,7 @@ jobs:
     displayName: 'Publish Results'
 
   - script: |
-      echo "Build ID   : $(Build.BuildId)"
-      echo "Branch     : $(Build.SourceBranchName)"
-      echo "Status     : SUCCESS"
+      echo "Build ID : $(Build.BuildId)"
+      echo "Branch   : $(Build.SourceBranchName)"
+      echo "Status   : SUCCESS"
     displayName: 'Summary'
